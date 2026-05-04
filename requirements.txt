@@ -1,0 +1,10 @@
+# GPU metric pipeline (vitex-bench env)
+# PaddleOCR is intentionally NOT listed here — it ships in a separate conda
+# env because its dependency closure conflicts with PyTorch + pyiqa.
+torch>=2.1
+torchvision>=0.16
+numpy>=1.26
+opencv-python>=4.8
+scikit-image>=0.22
+lpips>=0.1.4
+pyiqa>=0.1.10

@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: "ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing"
+message: "If you use ViTeX-Bench, please cite the accompanying paper."
+type: software
+authors:
+  - name: "Anonymous"
+abstract: >
+  ViTeX-Bench is a benchmark suite for faithful and temporally consistent
+  video scene text editing. It defines a thirteen-metric protocol over
+  three axes (text correctness, visual quality, and edit locality) on a
+  permanently frozen 157-clip evaluation split, and ships an open
+  reference model (ViTeX-14B) anchored under the same protocol.
+keywords:
+  - video editing
+  - scene text editing
+  - benchmark
+license: Apache-2.0
+preferred-citation:
+  type: conference-paper
+  title: "ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing"
+  authors:
+    - name: "Anonymous"
+  collection-title: "Submitted to NeurIPS 2026 Datasets and Benchmarks Track"
+  year: 2026
+  notes: "Author list and DOI updated after deanonymization."
