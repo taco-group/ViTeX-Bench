@@ -23,8 +23,8 @@ set -euo pipefail
 
 ROOT=${ROOT:-$(cd "$(dirname "$0")/.." && pwd)}
 BENCH=$ROOT/benchmark
-RECORDS=${RECORDS:-$ROOT/data/inference/parsed_records.json}
-DATA_ROOT=${DATA_ROOT:-$ROOT/data/inference}
+DATA_ROOT=${DATA_ROOT:-$ROOT/data/eval}
+RECORDS=${RECORDS:-$DATA_ROOT/parsed_records.json}
 BASELINES_ROOT=${BASELINES_ROOT:-$ROOT/baseline_output_videos}
 OUT=${OUT:-$ROOT/outputs}
 SRC_CACHE=$OUT/source_ocr.json
@@ -38,6 +38,29 @@ ORDER_DEFAULT="identity ViTeX-14B videopainter wan2.2vace14b kling fluxtext text
 ORDER=${ORDER:-$ORDER_DEFAULT}
 
 mkdir -p "$OUT"
+
+# Auto-download the evaluation split of ViTeX-Dataset if absent.
+ensure_data() {
+    if [ -f "$RECORDS" ] && [ -d "$DATA_ROOT/original_videos" ] && [ -d "$DATA_ROOT/masks" ]; then
+        return 0
+    fi
+    echo "[$(date '+%H:%M:%S')] Eval data not found at $DATA_ROOT, downloading from HF…"
+    if ! command -v huggingface-cli >/dev/null 2>&1; then
+        echo "ERROR: huggingface-cli not found; install huggingface_hub or download ViTeX-Dataset/eval manually to $DATA_ROOT" >&2
+        exit 1
+    fi
+    huggingface-cli download ViTeX-Bench/ViTeX-Dataset \
+        --repo-type dataset \
+        --include "eval/*" \
+        --local-dir "$ROOT/data"
+    if [ ! -f "$RECORDS" ]; then
+        echo "ERROR: download finished but $RECORDS still missing" >&2
+        exit 1
+    fi
+    echo "[$(date '+%H:%M:%S')] Eval data ready: $(find "$DATA_ROOT/original_videos" -name '*.mp4' | wc -l) clips"
+}
+
+ensure_data
 SUMMARY=$OUT/summary.tsv
 if [ ! -f "$SUMMARY" ]; then
     printf "baseline\tn_clips\tViTeX-Score\tCorrectness\tVisual\tLocality\tSeqAcc\tCharAcc\tTTS\tFlicker_full\tFlicker_crop\tWarp_full\tWarp_crop\tMUSIQ_full\tMUSIQ_crop\tPSNR_loc\tSSIM_loc\tLPIPS_loc\tDreamSim_loc\n" > "$SUMMARY"

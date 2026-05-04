@@ -8,3 +8,4 @@ opencv-python>=4.8
 scikit-image>=0.22
 lpips>=0.1.4
 pyiqa>=0.1.10
+dreamsim>=0.2.1

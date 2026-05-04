@@ -33,25 +33,37 @@ The Datasheet, Croissant 1.0 metadata, and dataset license live on the ViTeX-Dat
 ## Quickstart
 
 ```bash
-# 1. Clone + install
+# 1. Clone + install (two conda envs because PaddleOCR conflicts with PyTorch/pyiqa)
 git clone https://huggingface.co/ViTeX-Bench/ViTeX-Bench && cd ViTeX-Bench
 
 conda create -n paddleocr   python=3.12 -y && conda activate paddleocr   && pip install paddleocr opencv-python && conda deactivate
 conda create -n vitex-bench python=3.12 -y && conda activate vitex-bench && pip install -r requirements.txt        && conda deactivate
 
-# 2. Download dataset (387 clips with masks, ~12 GB)
-huggingface-cli download ViTeX-Bench/ViTeX-Dataset --repo-type dataset --local-dir data
+# 2. Drop your method's predictions in baseline_output_videos/<your_method>/<id>.mp4
+#    (1280x720, 24 fps, 120 frames; one .mp4 per clip id from parsed_records.json)
 
-# 3. Drop your method's predictions in baseline_output_videos/<your_method>/<id>.mp4
-#    (1280x720, 24 fps, 120 frames)
-
-# 4. Evaluate (one command — runs OCR on CPU then 13 metrics + ViTeX-Score on GPU)
+# 3. Evaluate. The runner downloads the 157-clip eval split of ViTeX-Dataset on
+#    first run, then runs OCR (CPU) + 13 metrics + ViTeX-Score (GPU) in one shot.
 bash scripts/run_benchmark.sh <your_method>
 ```
 
-`outputs/<your_method>/eval.json` will contain the per-clip metric vector, the 13 test-split aggregates with 95% bootstrap CIs, the per-axis aggregates, and the ViTeX-Score. `outputs/summary.tsv` accumulates a one-row-per-baseline TSV across runs.
+`outputs/<your_method>/eval.json` contains per-clip metric values, the 13 test-split aggregates with 95% bootstrap CIs, the per-axis aggregates, and the ViTeX-Score. `outputs/summary.tsv` accumulates a one-row-per-baseline TSV across runs.
 
-The evaluator separates OCR (PaddleOCR / CPU) from the GPU metric pipeline because PaddleOCR's deps don't co-install cleanly with PyTorch + pyiqa; the runner handles both stages and conda environment switching automatically. For all paper baselines at once, `bash scripts/run_benchmark.sh` (no argument) runs the full grid with CPU↔GPU pipelining.
+For the full paper baseline grid, run `bash scripts/run_benchmark.sh` with no argument; it pipelines CPU OCR and GPU metrics across baselines.
+
+### What the runner needs
+
+| | source | size | when |
+|---|---|---|---|
+| 157-clip evaluation split (videos + masks + records) | [ViTeX-Dataset/eval](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset/tree/main/eval) | ~6 GB | auto-downloaded by `run_benchmark.sh` on first run, cached at `data/eval/` |
+| PP-OCRv5 weights (4 scripts) | PaddlePaddle | ~200 MB | auto-downloaded by `paddleocr` to `~/.paddleocr/` on first OCR call |
+| RAFT-large optical flow | torchvision hub | ~80 MB | auto-downloaded to `~/.cache/torch/hub/` on first Warp call |
+| LPIPS (AlexNet) | `lpips` package | ~10 MB | auto-downloaded on first call |
+| MUSIQ-KonIQ | `pyiqa` | ~50 MB | auto-downloaded on first call |
+| DreamSim ensemble | HuggingFace hub | ~600 MB | auto-downloaded on first call |
+| Your prediction videos | you | n/a | one `.mp4` per clip id, dropped in `baseline_output_videos/<method>/` |
+
+That is the full external dependency list. **ViTeX-Score itself is self-contained** — it normalizes each of the 13 metrics through the frozen v1 endpoint table in [`benchmark/vitex_score.py`](./benchmark/vitex_score.py) and combines them by geometric mean, so your score does not depend on any other baseline's numbers. The reference baseline rows under [`results/`](./results) and the table below are for context, not for score computation.
 
 ---
 
