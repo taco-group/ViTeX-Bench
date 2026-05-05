@@ -16,14 +16,18 @@ tags:
 # ViTeX-Bench (evaluation code)
 
 > **ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing.**
-> Submitted to NeurIPS 2026 Datasets and Benchmarks Track (under double-blind review).
+> Submitted to NeurIPS 2026 Track on Evaluations and Datasets (under double-blind review).
+
+🌐 **Project page: [vitex-bench.github.io](https://vitex-bench.github.io/)**
 
 This repository contains the **evaluation code** for ViTeX-Bench — a **13-metric, three-axis** scoring pipeline plus the aggregate **ViTeX-Score**. Companion repos:
 
 | component | repo |
 |---|---|
+| **Project page** (qualitative results, leaderboard, overview) | https://vitex-bench.github.io/ |
 | **ViTeX-Dataset** (387 paired clips, 230 train / 157 frozen test) | https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset |
 | **ViTeX-14B** (open reference model) | https://huggingface.co/ViTeX-Bench/ViTeX-14B |
+| **ViTeX-Bench-Leaderboard** (live submission Space) | https://huggingface.co/spaces/ViTeX-Bench/ViTeX-Bench-Leaderboard |
 | **ViTeX-Bench** (this repo) | https://huggingface.co/ViTeX-Bench/ViTeX-Bench |
 
 The Datasheet, Croissant 1.0 metadata, and dataset license live on the ViTeX-Dataset repo above.
