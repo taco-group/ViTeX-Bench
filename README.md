@@ -24,11 +24,11 @@ This repository contains the **evaluation code** for ViTeX-Bench — a **13-metr
 
 | component | repo |
 |---|---|
-| **Project page** (qualitative results, leaderboard, overview) | https://vitex-bench.github.io/ |
-| **ViTeX-Dataset** (387 paired clips, 230 train / 157 frozen test) | https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset |
-| **ViTeX-14B** (open reference model) | https://huggingface.co/ViTeX-Bench/ViTeX-14B |
-| **ViTeX-Bench-Leaderboard** (live submission Space) | https://huggingface.co/spaces/ViTeX-Bench/ViTeX-Bench-Leaderboard |
-| **ViTeX-Bench** (this repo) | https://huggingface.co/ViTeX-Bench/ViTeX-Bench |
+| **Project page** | https://vitex-bench.github.io/ |
+| **Dataset** (387 paired clips, 230 train / 157 frozen test) | https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset |
+| **Benchmark code** (this repo) | https://huggingface.co/ViTeX-Bench/ViTeX-Bench |
+| **Model & Inference code** (ViTeX-14B reference model) | https://huggingface.co/ViTeX-Bench/ViTeX-14B |
+| **Leaderboard** (public submission Space) | https://huggingface.co/spaces/ViTeX-Bench/ViTeX-Bench-Leaderboard |
 
 The Datasheet, Croissant 1.0 metadata, and dataset license live on the ViTeX-Dataset repo above.
 
