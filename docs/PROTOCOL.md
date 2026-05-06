@@ -1,6 +1,6 @@
 # Evaluation Protocol
 
-ViTeX-Bench reports **thirteen metrics** along **three orthogonal axes** — text correctness (3 metrics), visual quality (6 metrics), and edit locality (4 metrics). The benchmark also defines an aggregate **ViTeX-Score** (see the final section) that summarizes a method as a single number while keeping the per-axis and per-metric breakdown for diagnostic use.
+ViTeX-Bench reports **thirteen metrics** along **three orthogonal axes** — text correctness (3 metrics), visual quality (6 metrics), and edit locality (4 metrics). The full thirteen-metric vector is the unit of report; no cross-axis aggregate is computed, because no axis substitutes for another. For ranking purposes only, the public leaderboard sorts on **TextScore**, the geometric mean of the three text-correctness primitives (see the final section).
 
 ## Task
 
@@ -134,18 +134,14 @@ Bootstrap captures sampling uncertainty over the 157-clip test split; if a CI is
 
 ---
 
-## ViTeX-Score (aggregate)
+## TextScore (leaderboard sort key)
 
-ViTeX-Score collapses the 13 primitives into a single number while keeping the per-axis breakdown for diagnosis:
+A public leaderboard needs one column to sort on. Every cross-axis aggregate we considered hid more signal than it revealed: a ranking that mixes text correctness, visual quality, and edit locality lets one axis silently compensate for another, exactly the failure mode the protocol is built to expose. We therefore sort on a single-axis key instead.
 
 $$
-\mathrm{ViTeX\text{-}Score} = \mathrm{geomean}(\mathrm{Correctness},\ \mathrm{Visual},\ \mathrm{Locality}),
-\quad
-\mathrm{Axis} = \mathrm{geomean}_w(\widetilde m_1, \dots, \widetilde m_k)
+\mathrm{TextScore} = \sqrt[3]{\mathrm{SeqAcc} \cdot \mathrm{CharAcc} \cdot \mathrm{TTS}}
 $$
 
-where $\mathrm{geomean}(x_1,\dots,x_n) = (\prod_i x_i)^{1/n}$ is the unweighted geometric mean and $\mathrm{geomean}_w(x_1,\dots,x_n) = (\prod_i x_i^{w_i})^{1/\sum_j w_j}$ is its weighted variant. Each primitive is normalized to $\widetilde m_i \in [0, 1]$ using a **frozen v1 endpoint table** (stored in `benchmark/vitex_score.py`); lower-better metrics are inverted before normalization. Within the visual axis the text-crop scope is weighted twice the full-frame scope ($w_{\mathrm{crop}} = 2$, $w_{\mathrm{full}} = 1$); correctness and locality use uniform weights.
+All three primitives are natively in $[0, 1]$, so no normalization is applied. The geometric mean across the three text-correctness primitives means $\mathrm{SeqAcc} = 0$ collapses TextScore to zero — the intended semantics for methods that never produce the requested target string. The remaining ten primitives still appear next to TextScore on the leaderboard, so the full thirteen-metric vector is always visible to the reader.
 
-The geometric mean at both levels enforces non-substitutivity: a primitive at zero (e.g., $\mathrm{SeqAcc} = 0$) collapses its axis, and an axis at zero collapses ViTeX-Score, so visual quality cannot rescue a missing edit. ViTeX-Score is reported on the test-split aggregated metrics with a 1000-resample clip-level percentile bootstrap CI; the per-axis scores and per-metric vector are reported alongside, so a low score is always traceable to the limiting axis.
-
-The full per-metric vector remains the primary artifact: a single scalar aggregate is convenient for ranking but hides failure-mode signal, and methods that score similarly on ViTeX-Score may still differ substantively on individual axes (e.g., a per-frame editor with strong correctness but weak temporal stability vs. a video editor with the reverse).
+TextScore is the only cross-metric aggregate emitted by the evaluator (`benchmark/text_score.py`). The aggregate is reported on the test-split aggregated text metrics with a 1000-resample clip-level percentile bootstrap CI. Because it covers only one axis, two methods with similar TextScore can still differ substantively on visual quality or edit locality — the per-metric vector remains the primary unit of comparison.

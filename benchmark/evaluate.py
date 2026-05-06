@@ -5,12 +5,15 @@ Reports the 13-metric protocol over three axes:
     Axis 2 — visual quality:    Flicker_{full,crop}, Warp_{full,crop}, MUSIQ_{full,crop}
     Axis 3 — edit locality:     PSNR_loc, SSIM_loc, LPIPS_loc, DreamSim_loc
 
-together with the aggregate ViTeX-Score (geometric mean across axes,
-within-axis weighted geometric mean). Each test-split aggregate is reported
-with a 95% bootstrap confidence interval (1000 resamples over clips).
-Per-clip records carry the raw source / prediction OCR strings together
-with all metric values so failure cases can be re-analyzed without
-re-running OCR or the GPU metric pass.
+The thirteen-metric vector is the unit of report. No cross-axis
+aggregate is computed; the leaderboard sorts by TextScore (geometric
+mean of the three text-correctness primitives) but every metric is
+still emitted alongside it so the full vector is always visible.
+Each test-split aggregate is reported with a 95% bootstrap confidence
+interval (1000 resamples over clips). Per-clip records carry the raw
+source / prediction OCR strings together with all metric values so
+failure cases can be re-analyzed without re-running OCR or the GPU
+metric pass.
 """
 
 import argparse
@@ -32,15 +35,15 @@ from bench_utils import (
 import text_metrics
 import visual_metrics
 import locality_metrics
-from vitex_score import (
-    AXIS_METRICS,
-    ENDPOINTS,
-    axis_scores,
-    vitex_score,
-)
+from text_score import text_score
 
 
-METRIC_KEYS = list(ENDPOINTS.keys())
+METRIC_KEYS = [
+    "SeqAcc", "CharAcc", "TTS",
+    "Flicker_full", "Flicker_crop", "Warp_full", "Warp_crop",
+    "MUSIQ_full", "MUSIQ_crop",
+    "PSNR_loc", "SSIM_loc", "LPIPS_loc", "DreamSim_loc",
+]
 
 
 def _bootstrap_ci(values, n_resamples=1000, seed=0, alpha=0.05):
@@ -78,67 +81,38 @@ def _aggregate_metrics(per_clip):
     return out
 
 
-def _agg_metric_means(clip_list):
-    """Mean of each metric across clips (None entries skipped)."""
-    out = {}
-    for k in METRIC_KEYS:
-        vals = [c[k] for c in clip_list if c.get(k) is not None]
-        if vals:
-            out[k] = sum(vals) / len(vals)
-    return out
-
-
-def _aggregate_score(per_clip, n_resamples=1000, seed=0, alpha=0.05):
-    """ViTeX-Score and per-axis scores on aggregated metrics, with bootstrap
-    CIs from clip-level resamples (the score is recomputed on each resample
-    rather than the per-metric CIs being separately propagated)."""
+def _aggregate_text_score(per_clip, n_resamples=1000, seed=0, alpha=0.05):
+    """TextScore on aggregated text metrics, with bootstrap CI from
+    clip-level resamples (the score is recomputed on each resample
+    rather than being propagated from per-metric CIs)."""
     clip_list = list(per_clip.values())
-    main_metrics = _agg_metric_means(clip_list)
-    main_score = vitex_score(main_metrics)
-    main_axes = axis_scores(main_metrics)
+    n = len(clip_list)
 
-    if len(clip_list) < 2:
-        return {
-            "vitex_score": {"mean": main_score, "ci_lo": None, "ci_hi": None, "n": len(clip_list)},
-            **{f"axis_{a}": {"mean": main_axes.get(a), "ci_lo": None, "ci_hi": None, "n": len(clip_list)}
-               for a in AXIS_METRICS},
-        }
+    def _agg_text_means(clips):
+        out = {}
+        for k in ("SeqAcc", "CharAcc", "TTS"):
+            vals = [c[k] for c in clips if c.get(k) is not None]
+            if vals:
+                out[k] = sum(vals) / len(vals)
+        return out
+
+    main = text_score(_agg_text_means(clip_list))
+    if n < 2:
+        return {"TextScore": {"mean": main, "ci_lo": None, "ci_hi": None, "n": n}}
 
     rng = random.Random(seed)
-    N = len(clip_list)
-    score_samples = []
-    axis_samples = {a: [] for a in AXIS_METRICS}
+    samples = []
     for _ in range(n_resamples):
-        sample = [clip_list[rng.randrange(N)] for _ in range(N)]
-        agg = _agg_metric_means(sample)
-        s = vitex_score(agg)
+        sample = [clip_list[rng.randrange(n)] for _ in range(n)]
+        s = text_score(_agg_text_means(sample))
         if s is not None:
-            score_samples.append(s)
-        for a, v in axis_scores(agg).items():
-            if v is not None:
-                axis_samples[a].append(v)
-
-    def _ci(samples):
-        if not samples:
-            return (None, None)
-        samples = sorted(samples)
-        lo = samples[int(alpha / 2 * len(samples))]
-        hi = samples[int((1 - alpha / 2) * len(samples)) - 1]
-        return (float(lo), float(hi))
-
-    s_lo, s_hi = _ci(score_samples)
-    out = {
-        "vitex_score": {"mean": main_score, "ci_lo": s_lo, "ci_hi": s_hi, "n": N},
-    }
-    for a in AXIS_METRICS:
-        a_lo, a_hi = _ci(axis_samples[a])
-        out[f"axis_{a}"] = {
-            "mean": main_axes.get(a),
-            "ci_lo": a_lo,
-            "ci_hi": a_hi,
-            "n": N,
-        }
-    return out
+            samples.append(s)
+    if not samples:
+        return {"TextScore": {"mean": main, "ci_lo": None, "ci_hi": None, "n": n}}
+    samples.sort()
+    lo = samples[int(alpha / 2 * len(samples))]
+    hi = samples[int((1 - alpha / 2) * len(samples)) - 1]
+    return {"TextScore": {"mean": main, "ci_lo": float(lo), "ci_hi": float(hi), "n": n}}
 
 
 def _print_summary(agg, score_agg, n_clips):
@@ -152,15 +126,12 @@ def _print_summary(agg, score_agg, n_clips):
     print("=" * 70)
     print(f"ViTeX-Bench results ({n_clips} clips, 95% bootstrap CI)")
     print("=" * 70)
-    print(f"  ViTeX-Score   : {fmt(score_agg['vitex_score'])}")
-    print(f"    correctness : {fmt(score_agg['axis_correctness'])}")
-    print(f"    visual      : {fmt(score_agg['axis_visual'])}")
-    print(f"    locality    : {fmt(score_agg['axis_locality'])}")
+    print(f"  TextScore (leaderboard sort key): {fmt(score_agg['TextScore'])}")
     print()
     print("Axis 1 — Text correctness")
-    print(f"  SeqAcc       : {fmt(agg['SeqAcc'])}")
-    print(f"  CharAcc      : {fmt(agg['CharAcc'])}")
-    print(f"  TTS          : {fmt(agg['TTS'])}")
+    print(f"  SeqAcc        : {fmt(agg['SeqAcc'])}")
+    print(f"  CharAcc       : {fmt(agg['CharAcc'])}")
+    print(f"  TTS           : {fmt(agg['TTS'])}")
     print("Axis 2 — Visual quality  (Flicker/Warp lower; MUSIQ higher)")
     print(f"  Flicker_full  : {fmt(agg['Flicker_full'])}")
     print(f"  Flicker_crop  : {fmt(agg['Flicker_crop'])}")
@@ -250,8 +221,7 @@ def main():
         }
         per_clip[vid] = {
             **clip_metrics,
-            "vitex_score": vitex_score(clip_metrics),
-            "axis_scores": axis_scores(clip_metrics),
+            "TextScore": text_score(clip_metrics),
             "lang": oc.get("lang", "en"),
             "source_text": oc["source_text"],
             "target_text": oc["target_text"],
@@ -272,7 +242,7 @@ def main():
               f"eta={eta/60:.1f}min", flush=True)
 
     aggregate = _aggregate_metrics(per_clip)
-    score_aggregate = _aggregate_score(per_clip)
+    score_aggregate = _aggregate_text_score(per_clip)
     aggregate.update(score_aggregate)
     with open(output, "w") as f:
         json.dump({"per_clip": per_clip, "aggregate": aggregate}, f,
