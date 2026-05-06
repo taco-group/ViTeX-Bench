@@ -147,6 +147,7 @@ def main():
             "organization": org,
             "paper_url": paper_url,
             "code_url": code_url,
+            "submitter": "admin",
             "submitted_at": "2026-05-04 00:00:00 UTC",
             "approved_at": "2026-05-04 00:00:00 UTC",
             "status": "approved",
