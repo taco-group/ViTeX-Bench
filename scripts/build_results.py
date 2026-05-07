@@ -61,8 +61,8 @@ EXTERNAL_REF = {
     "VideoPainter":          ("Bian et al., 2025", "https://arxiv.org/abs/2503.05639",
                               "https://github.com/TencentARC/VideoPainter"),
     "Kling Video 3.0 Omni":  ("Kuaishou (closed)", "", ""),
-    "ViTeX-Edit-14B":             (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-14B"),
-    "ViTeX-Edit-14B (Composite)": (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-14B"),
+    "ViTeX-Edit-14B":             (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B"),
+    "ViTeX-Edit-14B (Composite)": (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B"),
     "Identity (sanity)":     ("—", "", ""),
 }
 

@@ -18,7 +18,7 @@ tags:
 🌐 [Project page](https://vitex-bench.github.io/) &nbsp;·&nbsp;
 📊 [Dataset](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset) &nbsp;·&nbsp;
 🧪 Benchmark code &nbsp;·&nbsp;
-🤖 [Model & Inference code](https://huggingface.co/ViTeX-Bench/ViTeX-14B) &nbsp;·&nbsp;
+🤖 [Model & Inference code](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B) &nbsp;·&nbsp;
 🏆 [Leaderboard](https://huggingface.co/spaces/ViTeX-Bench/ViTeX-Bench-Leaderboard)
 
 Evaluation pipeline for **video scene text editing**. A 13-metric, three-axis protocol (text correctness, visual quality, edit locality) on the frozen 157-clip evaluation split of [ViTeX-Dataset](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset). The full thirteen-metric vector is the unit of report; the public [Leaderboard](https://huggingface.co/spaces/ViTeX-Bench/ViTeX-Bench-Leaderboard) sorts on **TextScore** = ∛(SeqAcc · CharAcc · TTS).
