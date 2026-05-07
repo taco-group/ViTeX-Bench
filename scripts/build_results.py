@@ -41,8 +41,8 @@ METHOD_LABEL = {
     "wan2.2vace14b":    ("Wan2.1-VACE-14B",        "C — mask-conditioned video inpainting"),
     "videopainter":     ("VideoPainter",           "C — mask-conditioned video inpainting"),
     "kling":            ("Kling Video 3.0 Omni",   "D — instruction-guided V2V"),
-    "ViTeX-14B":        ("ViTeX-14B",              "Reference"),
-    "ViTeX-14B_Corp":   ("ViTeX-14B (Composite)",  "Reference"),
+    "ViTeX-14B":        ("ViTeX-Edit-14B",              "Reference"),
+    "ViTeX-14B_Corp":   ("ViTeX-Edit-14B (Composite)",  "Reference"),
 }
 
 PAPER_NOTE = "Anonymous (NeurIPS 2026 D&B submission)"
@@ -61,8 +61,8 @@ EXTERNAL_REF = {
     "VideoPainter":          ("Bian et al., 2025", "https://arxiv.org/abs/2503.05639",
                               "https://github.com/TencentARC/VideoPainter"),
     "Kling Video 3.0 Omni":  ("Kuaishou (closed)", "", ""),
-    "ViTeX-14B":             (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-14B"),
-    "ViTeX-14B (Composite)": (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-14B"),
+    "ViTeX-Edit-14B":             (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-14B"),
+    "ViTeX-Edit-14B (Composite)": (PAPER_NOTE, "", "https://huggingface.co/ViTeX-Bench/ViTeX-14B"),
     "Identity (sanity)":     ("—", "", ""),
 }
 

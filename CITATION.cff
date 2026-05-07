@@ -9,7 +9,7 @@ abstract: >
   video scene text editing. It defines a thirteen-metric protocol over
   three axes (text correctness, visual quality, and edit locality) on a
   permanently frozen 157-clip evaluation split, and ships an open
-  reference model (ViTeX-14B) anchored under the same protocol.
+  reference model (ViTeX-Edit-14B) anchored under the same protocol.
 keywords:
   - video editing
   - scene text editing

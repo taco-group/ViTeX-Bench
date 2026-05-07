@@ -1,6 +1,6 @@
 # Baselines
 
-ViTeX-Bench is anchored by an eight-baseline cross-family reference grid spanning the four practical strategies for video scene text editing, plus the **identity sanity baseline** and the **ViTeX-14B reference model**. Each baseline was selected to expose the characteristic failure mode of its family rather than implementation-specific differences between methods that share a design principle.
+ViTeX-Bench is anchored by an eight-baseline cross-family reference grid spanning the four practical strategies for video scene text editing, plus the **identity sanity baseline** and the **ViTeX-Edit-14B reference model**. Each baseline was selected to expose the characteristic failure mode of its family rather than implementation-specific differences between methods that share a design principle.
 
 ## Family A — per-frame image scene-text editing
 
@@ -31,7 +31,7 @@ A third strategy uses a mask-conditioned video editor by supplying the dilated t
 
 | baseline | reference | inference |
 |---|---|---|
-| **Wan2.1-VACE-14B** (zero-shot) | Wan Team, 2025 | Unified Video Condition Unit DiT — same backbone ViTeX-14B is fine-tuned on. Queried zero-shot, no glyph conditioning |
+| **Wan2.1-VACE-14B** (zero-shot) | Wan Team, 2025 | Unified Video Condition Unit DiT — same backbone ViTeX-Edit-14B is fine-tuned on. Queried zero-shot, no glyph conditioning |
 | **VideoPainter** (zero-shot) | Bian et al., 2025 | Dual-stream context-controlled video inpainter; lightweight context encoder added to a frozen video DiT |
 
 Both Family C baselines run zero-shot. Each receives the dilated text-region mask $M$ and the same fixed prompt template as Family D. We use default hyperparameters from each official release; no per-clip prompt tuning. Family C inference runs on $2 \times \text{H100}$.
@@ -61,8 +61,8 @@ We additionally release an **identity** baseline (built by `benchmark/make_ident
 
 ---
 
-## Reference: ViTeX-14B (ours)
+## Reference: ViTeX-Edit-14B (ours)
 
-ViTeX-14B is the reference model anchored under ViTeX-Bench. It is fine-tuned from Wan2.1 with a glyph-video conditioning pathway (rendered target-glyph video tracked along the mask, encoded to fixed-length tokens, attended via per-block ConditionCrossAttention with zero-initialized residuals). Training and inference details are in the paper §3.3 and supplementary §E. The model is released alongside the dataset on the public mirror after deanonymization.
+ViTeX-Edit-14B is the reference model anchored under ViTeX-Bench. It is fine-tuned from Wan2.1 with a glyph-video conditioning pathway (rendered target-glyph video tracked along the mask, encoded to fixed-length tokens, attended via per-block ConditionCrossAttention with zero-initialized residuals). Training and inference details are in the paper §3.3 and supplementary §E. The model is released alongside the dataset on the public mirror after deanonymization.
 
-`results/summary.tsv` contains the headline numbers from the paper. The full per-clip JSON for every baseline and ViTeX-14B is also published under `results/` so independent analyses (per-language stratification, target-text length sweeps, motion-intensity sweeps, …) can be run without re-executing OCR or the GPU pipeline.
+`results/summary.tsv` contains the headline numbers from the paper. The full per-clip JSON for every baseline and ViTeX-Edit-14B is also published under `results/` so independent analyses (per-language stratification, target-text length sweeps, motion-intensity sweeps, …) can be run without re-executing OCR or the GPU pipeline.

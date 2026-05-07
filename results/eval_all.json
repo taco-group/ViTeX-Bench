@@ -3565,7 +3565,7 @@
       }
     },
     "ViTeX-14B": {
-      "label": "ViTeX-14B",
+      "label": "ViTeX-Edit-14B",
       "family": "Reference",
       "n_clips": 157,
       "aggregate": {
@@ -7112,7 +7112,7 @@
       }
     },
     "ViTeX-14B_Corp": {
-      "label": "ViTeX-14B (Composite)",
+      "label": "ViTeX-Edit-14B (Composite)",
       "family": "Reference",
       "n_clips": 157,
       "aggregate": {
