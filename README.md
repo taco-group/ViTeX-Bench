@@ -8,7 +8,7 @@
 
 Evaluation pipeline for **video scene text editing**. A 13-metric, three-axis protocol (text correctness, visual quality, edit locality) on the frozen 157-clip evaluation split of [ViTeX-Dataset](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset). The full thirteen-metric vector is the unit of report. One metric per axis is primary — **SeqAcc** (text correctness), **Warp_crop** (temporal quality), **DreamSim_loc** (edit locality) — and the public [Leaderboard](https://vitex-bench.github.io/ViTeX-Bench-Leaderboard/) marks the Pareto set on these three instead of computing an aggregate score.
 
-> Accompanies *ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing* (NeurIPS 2026 Track on Evaluations and Datasets).
+> Accompanies *ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing* (NeurIPS 2026 Track on Evaluations and Datasets).
 
 ## Quickstart
 
@@ -41,7 +41,7 @@ Apache-2.0 (this code; see [`LICENSE`](./LICENSE)). The dataset itself is CC-BY-
 
 ```bibtex
 @inproceedings{chen2026vitexbench,
-  title     = {ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing},
+  title     = {ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing},
   author    = {Chen, Xinghao and Gao, Xiangbo and Yu, Jiongze and Wu, Yuheng and Tu, Zhengzhong},
   booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
   year      = {2026},

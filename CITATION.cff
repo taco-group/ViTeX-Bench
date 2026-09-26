@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing"
+title: "ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing"
 message: "If you use ViTeX-Bench, please cite the accompanying paper."
 type: software
 authors:
@@ -27,7 +27,7 @@ license: Apache-2.0
 repository-code: "https://github.com/ViTeX-Bench/ViTeX-Bench"
 preferred-citation:
   type: conference-paper
-  title: "ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing"
+  title: "ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing"
   authors:
     - family-names: "Chen"
       given-names: "Xinghao"
