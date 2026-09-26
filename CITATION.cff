@@ -3,7 +3,16 @@ title: "ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing"
 message: "If you use ViTeX-Bench, please cite the accompanying paper."
 type: software
 authors:
-  - name: "Anonymous"
+  - family-names: "Chen"
+    given-names: "Xinghao"
+  - family-names: "Gao"
+    given-names: "Xiangbo"
+  - family-names: "Yu"
+    given-names: "Jiongze"
+  - family-names: "Wu"
+    given-names: "Yuheng"
+  - family-names: "Tu"
+    given-names: "Zhengzhong"
 abstract: >
   ViTeX-Bench is a benchmark suite for faithful and temporally consistent
   video scene text editing. It defines a thirteen-metric protocol over
@@ -15,11 +24,21 @@ keywords:
   - scene text editing
   - benchmark
 license: Apache-2.0
+repository-code: "https://github.com/ViTeX-Bench/ViTeX-Bench"
 preferred-citation:
   type: conference-paper
   title: "ViTeX-Bench: Benchmarking High Fidelity Video Scene Text Editing"
   authors:
-    - name: "Anonymous"
-  collection-title: "Submitted to NeurIPS 2026 Datasets and Benchmarks Track"
+    - family-names: "Chen"
+      given-names: "Xinghao"
+    - family-names: "Gao"
+      given-names: "Xiangbo"
+    - family-names: "Yu"
+      given-names: "Jiongze"
+    - family-names: "Wu"
+      given-names: "Yuheng"
+    - family-names: "Tu"
+      given-names: "Zhengzhong"
+  collection-title: "Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets"
   year: 2026
-  notes: "Author list and DOI updated after deanonymization."
+  url: "https://vitex-bench.github.io/"

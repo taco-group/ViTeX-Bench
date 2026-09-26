@@ -50,7 +50,7 @@ We chose **one** representative closed-source commercial system rather than thre
 
 ## Identity sanity baseline
 
-We additionally release an **identity** baseline (built by `benchmark/make_identity_baseline.py`) that copies the source video verbatim as the prediction. Identity is a lower bound for text-correctness (SeqAcc / CharAcc / TTS should be near zero unless the source string already matches the target by chance) and an upper bound for edit-locality (PSNR_loc = 100, SSIM_loc = 1, LPIPS_loc = 0, modulo the 100 dB cap on PSNR). It also calibrates Flicker against codec re-encoding noise — Flicker_full of the source itself.
+We additionally release an **identity** baseline (built by `benchmark/make_identity_baseline.py`) that copies the source video verbatim as the prediction; it is reported as the **Source video** row in the paper and on the leaderboard and is never ranked. Identity anchors text correctness from below (SeqAcc should be near zero unless the source string already matches the target by chance; TTS stays high, about 0.76, because an unedited string is trivially stable, which is why TTS must be read together with SeqAcc and CharAcc) and edit locality from above for edit-locality (PSNR_loc = 100, SSIM_loc = 1, LPIPS_loc = 0, modulo the 100 dB cap on PSNR). It also calibrates Flicker against codec re-encoding noise — Flicker_full of the source itself.
 
 ## Excluded methods
 

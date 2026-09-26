@@ -4,18 +4,18 @@ This directory holds the public release artifacts produced by `scripts/build_res
 
 | file | contents |
 |---|---|
-| `eval_all.json` | per-method per-clip records + aggregates for all eleven baselines on the 157-clip frozen test split. Each method carries its label, family tag, and the 13 primitives + TextScore. The full per-clip OCR strings are kept so failure cases can be re-analyzed without re-running the pipeline. |
-| `summary.tsv` | one row per baseline, sorted by TextScore descending. Columns: `baseline`, `family`, `n_clips`, `TextScore`, then the 13 primitives. |
-| `leaderboard.jsonl` | one record per baseline in the format consumed by the [ViTeX-Bench-Leaderboard](https://huggingface.co/spaces/ViTeX-Bench/ViTeX-Bench-Leaderboard) Space; pre-populates the public leaderboard. |
+| `eval_all.json` | per-method per-clip records + aggregates for all eleven baselines on the 157-clip frozen test split. Each method carries its label, family tag, and the 13 primitives. The full per-clip OCR strings are kept so failure cases can be re-analyzed without re-running the pipeline. |
+| `summary.tsv` | one row per method: ranked editors first, each group sorted by SeqAcc descending. Columns: `method`, `family`, `n_clips`, `pareto`, then the 13 primitives. |
+| `leaderboard.jsonl` | one record per method in the format of `data/submissions.jsonl` in [ViTeX-Bench-Leaderboard](https://github.com/ViTeX-Bench/ViTeX-Bench-Leaderboard); pre-populates the public leaderboard. |
 
 ## summary.tsv schema
 
 | column | meaning |
 |---|---|
-| `baseline` | public method label (paper-aligned) |
-| `family` | A — per-frame image editor / B — first-frame + I2V propagation / C — mask-conditioned video inpainting / D — instruction-guided V2V / Reference / `—` (sanity) |
+| `method` | public method label (paper-aligned) |
+| `family` | A — per-frame image editing / B — first-frame editing + propagation / C — mask-conditioned video inpainting / D — instruction-guided video editing / Reference editor / `-` (Source video) |
 | `n_clips` | number of clips with at least one valid metric value (per-clip `None`s are skipped during the mean) |
-| `TextScore` | $\sqrt[3]{\mathrm{SeqAcc} \cdot \mathrm{CharAcc} \cdot \mathrm{TTS}}$ — leaderboard sort key |
+| `pareto` | `yes` / `no`: on the Pareto set of ranked editors over the primary metrics SeqAcc ↑, Warp_crop ↓, DreamSim_loc ↓. `-`: not ranked (Source video, post-processed Composite, or VideoPainter, whose temporal metrics come from frame interpolation) |
 | `SeqAcc` / `CharAcc` / `TTS` | Axis 1 — exact match / fitting similarity / adjacent-pair stability over detectable frames |
 | `Flicker_full` / `Flicker_crop` | Axis 2 — adjacent-frame MAE on full frames / on the per-clip union mask bbox |
 | `Warp_full` / `Warp_crop` | Axis 2 — adjacent-frame MAE after backward-warping along RAFT optical flow on the source |

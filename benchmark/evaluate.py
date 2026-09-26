@@ -5,10 +5,10 @@ Reports the 13-metric protocol over three axes:
     Axis 2 — visual quality:    Flicker_{full,crop}, Warp_{full,crop}, MUSIQ_{full,crop}
     Axis 3 — edit locality:     PSNR_loc, SSIM_loc, LPIPS_loc, DreamSim_loc
 
-The thirteen-metric vector is the unit of report. No cross-axis
-aggregate is computed; the leaderboard sorts by TextScore (geometric
-mean of the three text-correctness primitives) but every metric is
-still emitted alongside it so the full vector is always visible.
+The thirteen-metric vector is the unit of report. One metric per axis
+is primary -- SeqAcc (text correctness), Warp_crop (temporal quality),
+DreamSim_loc (edit locality) -- and methods are compared through the
+Pareto set on these three; no cross-axis aggregate is computed.
 Each test-split aggregate is reported with a 95% bootstrap confidence
 interval (1000 resamples over clips). Per-clip records carry the raw
 source / prediction OCR strings together with all metric values so
@@ -35,7 +35,6 @@ from bench_utils import (
 import text_metrics
 import visual_metrics
 import locality_metrics
-from text_score import text_score
 
 
 METRIC_KEYS = [
@@ -44,6 +43,7 @@ METRIC_KEYS = [
     "MUSIQ_full", "MUSIQ_crop",
     "PSNR_loc", "SSIM_loc", "LPIPS_loc", "DreamSim_loc",
 ]
+PRIMARY_KEYS = ["SeqAcc", "Warp_crop", "DreamSim_loc"]
 
 
 def _bootstrap_ci(values, n_resamples=1000, seed=0, alpha=0.05):
@@ -81,41 +81,7 @@ def _aggregate_metrics(per_clip):
     return out
 
 
-def _aggregate_text_score(per_clip, n_resamples=1000, seed=0, alpha=0.05):
-    """TextScore on aggregated text metrics, with bootstrap CI from
-    clip-level resamples (the score is recomputed on each resample
-    rather than being propagated from per-metric CIs)."""
-    clip_list = list(per_clip.values())
-    n = len(clip_list)
-
-    def _agg_text_means(clips):
-        out = {}
-        for k in ("SeqAcc", "CharAcc", "TTS"):
-            vals = [c[k] for c in clips if c.get(k) is not None]
-            if vals:
-                out[k] = sum(vals) / len(vals)
-        return out
-
-    main = text_score(_agg_text_means(clip_list))
-    if n < 2:
-        return {"TextScore": {"mean": main, "ci_lo": None, "ci_hi": None, "n": n}}
-
-    rng = random.Random(seed)
-    samples = []
-    for _ in range(n_resamples):
-        sample = [clip_list[rng.randrange(n)] for _ in range(n)]
-        s = text_score(_agg_text_means(sample))
-        if s is not None:
-            samples.append(s)
-    if not samples:
-        return {"TextScore": {"mean": main, "ci_lo": None, "ci_hi": None, "n": n}}
-    samples.sort()
-    lo = samples[int(alpha / 2 * len(samples))]
-    hi = samples[int((1 - alpha / 2) * len(samples)) - 1]
-    return {"TextScore": {"mean": main, "ci_lo": float(lo), "ci_hi": float(hi), "n": n}}
-
-
-def _print_summary(agg, score_agg, n_clips):
+def _print_summary(agg, n_clips):
     def fmt(d):
         if d["mean"] is None:
             return "N/A"
@@ -126,7 +92,9 @@ def _print_summary(agg, score_agg, n_clips):
     print("=" * 70)
     print(f"ViTeX-Bench results ({n_clips} clips, 95% bootstrap CI)")
     print("=" * 70)
-    print(f"  TextScore (leaderboard sort key): {fmt(score_agg['TextScore'])}")
+    print("Primary metrics (one per axis)")
+    for k in PRIMARY_KEYS:
+        print(f"  {k:<14}: {fmt(agg[k])}")
     print()
     print("Axis 1 — Text correctness")
     print(f"  SeqAcc        : {fmt(agg['SeqAcc'])}")
@@ -221,7 +189,6 @@ def main():
         }
         per_clip[vid] = {
             **clip_metrics,
-            "TextScore": text_score(clip_metrics),
             "lang": oc.get("lang", "en"),
             "source_text": oc["source_text"],
             "target_text": oc["target_text"],
@@ -242,12 +209,10 @@ def main():
               f"eta={eta/60:.1f}min", flush=True)
 
     aggregate = _aggregate_metrics(per_clip)
-    score_aggregate = _aggregate_text_score(per_clip)
-    aggregate.update(score_aggregate)
     with open(output, "w") as f:
         json.dump({"per_clip": per_clip, "aggregate": aggregate}, f,
                   indent=2, ensure_ascii=False)
-    _print_summary(aggregate, score_aggregate, len(per_clip))
+    _print_summary(aggregate, len(per_clip))
     print(f"\nSaved → {output}")
 
 

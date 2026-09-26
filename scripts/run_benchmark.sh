@@ -63,7 +63,7 @@ ensure_data() {
 ensure_data
 SUMMARY=$OUT/summary.tsv
 if [ ! -f "$SUMMARY" ]; then
-    printf "baseline\tn_clips\tTextScore\tSeqAcc\tCharAcc\tTTS\tFlicker_full\tFlicker_crop\tWarp_full\tWarp_crop\tMUSIQ_full\tMUSIQ_crop\tPSNR_loc\tSSIM_loc\tLPIPS_loc\tDreamSim_loc\n" > "$SUMMARY"
+    printf "baseline\tn_clips\tSeqAcc\tCharAcc\tTTS\tFlicker_full\tFlicker_crop\tWarp_full\tWarp_crop\tMUSIQ_full\tMUSIQ_crop\tPSNR_loc\tSSIM_loc\tLPIPS_loc\tDreamSim_loc\n" > "$SUMMARY"
 fi
 
 ts() { date '+%H:%M:%S'; }
@@ -126,14 +126,13 @@ n = len(d['per_clip'])
 def m(k):
     v = agg[k]
     return 'N/A' if v.get('mean') is None else f'{v[\"mean\"]:.4f}'
-keys = ['TextScore',
-        'SeqAcc','CharAcc','TTS',
+keys = ['SeqAcc','CharAcc','TTS',
         'Flicker_full','Flicker_crop','Warp_full','Warp_crop','MUSIQ_full','MUSIQ_crop',
         'PSNR_loc','SSIM_loc','LPIPS_loc','DreamSim_loc']
 row = ['$B', str(n)] + [m(k) for k in keys]
 with open('$SUMMARY', 'a') as f:
     f.write('\t'.join(row) + '\n')
-print(f'[$B] TextScore = {m(\"TextScore\")}  SeqAcc={m(\"SeqAcc\")}  CharAcc={m(\"CharAcc\")}  TTS={m(\"TTS\")}')
+print(f'[$B] primary: SeqAcc={m(\"SeqAcc\")}  Warp_crop={m(\"Warp_crop\")}  DreamSim_loc={m(\"DreamSim_loc\")}')
 "
 }
 

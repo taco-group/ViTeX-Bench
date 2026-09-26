@@ -1,6 +1,6 @@
 # Evaluation Protocol
 
-ViTeX-Bench reports **thirteen metrics** along **three orthogonal axes** — text correctness (3 metrics), visual quality (6 metrics), and edit locality (4 metrics). The full thirteen-metric vector is the unit of report; no cross-axis aggregate is computed, because no axis substitutes for another. For ranking purposes only, the public leaderboard sorts on **TextScore**, the geometric mean of the three text-correctness primitives (see the final section).
+ViTeX-Bench reports **thirteen metrics** along **three axes** — text correctness (3 metrics), visual quality (6 metrics), and edit locality (4 metrics). The full thirteen-metric vector is the unit of report. One metric per axis is designated as primary, and methods are compared through the Pareto set on the three primaries; no aggregate score is computed (see the final section).
 
 ## Task
 
@@ -134,14 +134,18 @@ Bootstrap captures sampling uncertainty over the 157-clip test split; if a CI is
 
 ---
 
-## TextScore (leaderboard sort key)
+## Primary metrics and Pareto comparison
 
-A public leaderboard needs one column to sort on. Every cross-axis aggregate we considered hid more signal than it revealed: a ranking that mixes text correctness, visual quality, and edit locality lets one axis silently compensate for another, exactly the failure mode the protocol is built to expose. We therefore sort on a single-axis key instead.
+One metric per axis is primary:
 
-$$
-\mathrm{TextScore} = \sqrt[3]{\mathrm{SeqAcc} \cdot \mathrm{CharAcc} \cdot \mathrm{TTS}}
-$$
+| axis | primary metric | direction |
+|---|---|---|
+| Text correctness | SeqAcc | higher is better |
+| Visual / temporal quality | Warp_crop | lower is better |
+| Edit locality | DreamSim_loc | lower is better |
 
-All three primitives are natively in $[0, 1]$, so no normalization is applied. The geometric mean across the three text-correctness primitives means $\mathrm{SeqAcc} = 0$ collapses TextScore to zero — the intended semantics for methods that never produce the requested target string. The remaining ten primitives still appear next to TextScore on the leaderboard, so the full thirteen-metric vector is always visible to the reader.
+The remaining ten metrics diagnose partial character correctness, decoded-string stability, perceptual quality, and other spatial scopes. Trade-offs are compared through the **Pareto set**: a method is dominated if another method is at least as good on all three primaries and strictly better on at least one. This is a point-estimate comparison, not a significance test, so the per-metric bootstrap CIs remain necessary for nearby methods.
 
-TextScore is the only cross-metric aggregate emitted by the evaluator (`benchmark/text_score.py`). The aggregate is reported on the test-split aggregated text metrics with a 1000-resample clip-level percentile bootstrap CI. Because it covers only one axis, two methods with similar TextScore can still differ substantively on visual quality or edit locality — the per-metric vector remains the primary unit of comparison.
+No weighted aggregate is defined, because its weights would impose an application-specific exchange rate between character errors, temporal artifacts, and background changes. Pareto membership alone does not imply a successful edit: a method that leaves the source text unchanged (SeqAcc = 0) can still be non-dominated through strong stability and locality, so the full vector must be read alongside the front.
+
+Only raw editor outputs are compared. Post-processed outputs (e.g. the Composite wrapper) and the Source video reference are reported but not ranked, and methods whose temporal metrics are not directly comparable (e.g. VideoPainter, whose outputs are linearly interpolated from 8 fps) are excluded from the Pareto comparison. `scripts/build_results.py` computes the front for the paper baselines; the public leaderboard computes it for all entries.
