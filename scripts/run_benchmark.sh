@@ -9,7 +9,7 @@
 #
 # Configurable via environment variables (defaults shown):
 #   ROOT              repository root                       (auto-detected)
-#   DATA_ROOT         dataset root                          $ROOT/data/inference
+#   DATA_ROOT         dataset root                          $ROOT/data/eval
 #   RECORDS           records JSON                          $DATA_ROOT/parsed_records.json
 #   BASELINES_ROOT    baseline output root                  $ROOT/baseline_output_videos
 #   OUT               output / cache root                   $ROOT/outputs
@@ -45,11 +45,17 @@ ensure_data() {
         return 0
     fi
     echo "[$(date '+%H:%M:%S')] Eval data not found at $DATA_ROOT, downloading from HF…"
-    if ! command -v huggingface-cli >/dev/null 2>&1; then
-        echo "ERROR: huggingface-cli not found; install huggingface_hub or download ViTeX-Dataset/eval manually to $DATA_ROOT" >&2
+    # `hf` is the CLI of huggingface_hub >= 1.0; older releases only ship `huggingface-cli`.
+    local HF_CLI
+    if command -v hf >/dev/null 2>&1; then
+        HF_CLI=hf
+    elif command -v huggingface-cli >/dev/null 2>&1; then
+        HF_CLI=huggingface-cli
+    else
+        echo "ERROR: neither hf nor huggingface-cli found; pip install huggingface_hub, or download ViTeX-Dataset/eval manually to $DATA_ROOT" >&2
         exit 1
     fi
-    huggingface-cli download ViTeX-Bench/ViTeX-Dataset \
+    "$HF_CLI" download ViTeX-Bench/ViTeX-Dataset \
         --repo-type dataset \
         --include "eval/*" \
         --local-dir "$ROOT/data"

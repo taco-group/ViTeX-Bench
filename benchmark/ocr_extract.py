@@ -10,8 +10,8 @@ Usage
 -----
     PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True \\
     conda run -n paddleocr python benchmark/ocr_extract.py \\
-        --records   data/inference/parsed_records.json \\
-        --data_root data/inference \\
+        --records   data/eval/parsed_records.json \\
+        --data_root data/eval \\
         --pred_dir  baseline_output_videos/ViTeX-14B \\
         --output    outputs/ViTeX-14B/ocr.json \\
         --src_cache outputs/source_ocr.json \\

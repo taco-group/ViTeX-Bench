@@ -1,18 +1,16 @@
 # Examples
 
-A single-clip walkthrough lives here once the public dataset mirror goes live (URL added at deanonymization). The example will include:
-
-- A source clip with mask (`example_clip.mp4`, `example_mask.mp4`)
-- The expected `parsed_records.json` entry
-- A pre-computed identity-baseline `eval.json` so you can verify your local install end-to-end against known-good numbers
-
-For now, the simplest end-to-end smoke test is the identity sanity baseline:
+The simplest end-to-end check of an installation is the identity sanity baseline, which copies each source clip as its own prediction:
 
 ```bash
+hf download ViTeX-Bench/ViTeX-Dataset --repo-type dataset --include "eval/*" --local-dir data
 python benchmark/make_identity_baseline.py \
-    --records  data/inference/parsed_records.json \
-    --src_dir  data/inference/original_videos \
+    --records  data/eval/parsed_records.json \
+    --src_dir  data/eval/original_videos \
     --out_dir  baseline_output_videos/identity
+bash scripts/run_benchmark.sh identity
 ```
 
-then run Stage 1 + Stage 2 from the top-level Quickstart. Identity should produce `PSNR_loc = 100`, `SSIM_loc = 1`, `LPIPS_loc = 0` on every clip — if your numbers deviate, the pipeline isn't installed correctly.
+Identity should give `PSNR_loc = 100`, `SSIM_loc = 1` and `LPIPS_loc = 0` on every clip, and its aggregates should match the *Source video* row of [`results/summary.tsv`](../results/summary.tsv). If they do not, the pipeline is not installed correctly.
+
+To produce predictions with the reference model, see [`vitex_edit/README.md`](../vitex_edit/README.md).

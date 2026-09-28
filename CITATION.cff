@@ -24,7 +24,7 @@ keywords:
   - scene text editing
   - benchmark
 license: Apache-2.0
-repository-code: "https://github.com/ViTeX-Bench/ViTeX-Bench"
+repository-code: "https://github.com/taco-group/ViTeX-Bench"
 preferred-citation:
   type: conference-paper
   title: "ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing"

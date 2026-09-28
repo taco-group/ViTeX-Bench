@@ -33,7 +33,7 @@ The headline numbers were produced on:
 | component | spec |
 |---|---|
 | CPU | 32-core x86_64 (Linux) |
-| GPU | NVIDIA RTX 5090, 24 GB |
+| GPU | NVIDIA RTX 5090, 32 GB |
 | RAM | 32 GB DDR5 |
 | swap | 32 GB (incidentally present from earlier workloads, not needed by this pipeline) |
 
@@ -66,16 +66,16 @@ The video-decoder backend (`cv2.VideoCapture`) decodes H.264 deterministically a
 ## Step-by-step
 
 ```bash
-# 1. Layout
-data/inference/parsed_records.json
-data/inference/original_videos/<id>.mp4
-data/inference/text_masks/<id>_<ts>_<hash>.mp4
+# 1. Layout (scripts/run_benchmark.sh downloads data/eval on first run)
+data/eval/parsed_records.json
+data/eval/original_videos/<id>.mp4
+data/eval/masks/<id>.mp4
 baseline_output_videos/<method>/<id>.mp4
 
 # 2. Identity sanity (also bootstraps the source-OCR cache)
 python benchmark/make_identity_baseline.py \
-    --records  data/inference/parsed_records.json \
-    --src_dir  data/inference/original_videos \
+    --records  data/eval/parsed_records.json \
+    --src_dir  data/eval/original_videos \
     --out_dir  baseline_output_videos/identity
 
 # 3. Run the full grid (10 baselines, ~13 hours)
@@ -96,7 +96,6 @@ for k, v in sorted(d['per_clip'].items())[:5]:
 ## What if my numbers don't match?
 
 Differences of a few percentage points are expected because:
-- Mask file timestamps in `parsed_records.json` change between dataset re-builds; the binary mask itself is stable.
 - Some Family A baselines (especially those distributed without exact training-data hashes) may produce slightly different fine-tuned outputs across hardware.
 - PP-OCRv5 model weights are versioned; the `_PADDLEX_VERSION` in your install determines the exact recognizer.
 

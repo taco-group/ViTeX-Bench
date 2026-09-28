@@ -9,8 +9,8 @@ It also calibrates Flicker against codec re-encoding noise.
 Usage
 -----
     python benchmark/make_identity_baseline.py \\
-        --records  data/inference/parsed_records.json \\
-        --src_dir  data/inference/original_videos \\
+        --records  data/eval/parsed_records.json \\
+        --src_dir  data/eval/original_videos \\
         --out_dir  baseline_output_videos/identity
 """
 

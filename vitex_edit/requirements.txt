@@ -1,0 +1,34 @@
+# ViTeX-Edit-14B (vitex_edit/). Install a CUDA build of torch/torchvision/torchaudio
+# that matches your driver first, e.g.
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+
+# Inference (bundled diffsynth/)
+torch>=2.7.0
+torchvision
+torchaudio
+transformers
+accelerate>=1.13.0
+peft
+safetensors
+einops
+sentencepiece
+protobuf
+ftfy
+regex
+typing_extensions
+huggingface_hub
+modelscope
+numpy
+pandas
+Pillow
+opencv-python
+imageio
+imageio-ffmpeg
+tqdm
+
+# Glyph videos (select_font.py, render_glyph.py)
+requests
+easyocr
+cotracker @ git+https://github.com/facebookresearch/co-tracker.git
+
+# Training (train/) additionally needs: deepspeed

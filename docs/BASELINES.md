@@ -63,6 +63,6 @@ We additionally release an **identity** baseline (built by `benchmark/make_ident
 
 ## Reference: ViTeX-Edit-14B (ours)
 
-ViTeX-Edit-14B is the reference model anchored under ViTeX-Bench. It is fine-tuned from Wan2.1 with a glyph-video conditioning pathway (rendered target-glyph video tracked along the mask, encoded to fixed-length tokens, attended via per-block ConditionCrossAttention with zero-initialized residuals). Training and inference details are in the paper §3.3 and supplementary §E. The model is released alongside the dataset on the public mirror after deanonymization.
+ViTeX-Edit-14B is the reference model anchored under ViTeX-Bench. It fine-tunes the VACE branch of Wan2.1-VACE-14B and adds a glyph-video conditioning pathway: the target string is rendered and tracked along the source text, encoded to 64 tokens, and attended by every VACE block through a zero-initialized condition cross-attention layer. Method and training details are in the paper (Section 4 and the ViTeX-Edit-14B implementation appendix). Code for glyph rendering, inference, the Composite wrapper and training is in [`vitex_edit/`](../vitex_edit); weights are on [Hugging Face](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B).
 
 `results/summary.tsv` contains the headline numbers from the paper. The full per-clip JSON for every baseline and ViTeX-Edit-14B is also published under `results/` so independent analyses (per-language stratification, target-text length sweeps, motion-intensity sweeps, …) can be run without re-executing OCR or the GPU pipeline.
