@@ -242,7 +242,13 @@ class AutoWrappedNonRecurseModule(AutoWrappedModule):
             
     def load_from_disk(self, torch_dtype, device, copy_module=False):
         if copy_module:
-            module = copy.deepcopy(self.module)
+            # Only this module's own parameters are loaded here; its children are
+            # wrapped layers that load themselves and hold open safetensors
+            # handles, which deepcopy cannot copy. A shallow copy with its own
+            # parameter dict leaves the original module untouched.
+            module = copy.copy(self.module)
+            module._parameters = dict(self.module._parameters)
+            module._buffers = dict(self.module._buffers)
         else:
             module = self.module
         state_dict = {}
@@ -252,7 +258,7 @@ class AutoWrappedNonRecurseModule(AutoWrappedModule):
             state_dict[name] = param
         module.load_state_dict(state_dict, assign=True, strict=False)
         return module
-    
+
     def offload_to_disk(self, model: torch.nn.Module):
         for name in self.required_params:
             getattr(self, name).to("meta")
