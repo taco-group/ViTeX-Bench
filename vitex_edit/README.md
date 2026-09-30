@@ -5,7 +5,7 @@ Reference editor for video scene text editing, released with ViTeX-Bench. It fin
 | file | purpose |
 |---|---|
 | `select_font.py` | Qwen3-VL (via Ollama) picks the closest typeface for the source text |
-| `render_glyph.py` | EasyOCR + CoTracker3 + projective warp → glyph video |
+| `render_glyph.py` | EasyOCR + CoTracker3 + projective warp, checked against the mask in every frame → glyph video |
 | `inference.py` | ViTeX-Edit-14B on one clip or on a whole split, multi-GPU sharding, low-memory modes |
 | `composite.py` | training-free Composite post-processing → ViTeX-Edit-14B (Composite) |
 | `train/` | two-stage fine-tuning recipe used for the released checkpoint |
