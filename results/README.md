@@ -31,4 +31,4 @@ print(agg['SeqAcc'])
 # {'mean': 0.341, 'ci_lo': 0.265, 'ci_hi': 0.418, 'n': 157}
 ```
 
-The numbers in this directory were produced on the test split distributed with this repository's accompanying paper. See `docs/REPRODUCIBILITY.md` for the environment and expected runtime.
+The numbers in this directory were produced on the test split distributed with this repository's [accompanying paper](https://arxiv.org/abs/2609.40356). See `docs/REPRODUCIBILITY.md` for the environment and expected runtime.

@@ -1,6 +1,6 @@
 # ViTeX-Edit-14B
 
-Reference editor for video scene text editing, released with ViTeX-Bench. It fine-tunes the VACE branch of [Wan2.1-VACE-14B](https://huggingface.co/Wan-AI/Wan2.1-VACE-14B) on the 230-clip training split of [ViTeX-Dataset](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset) and adds a glyph-video stream. The glyph stream renders the target string in a typeface matched to the source text and warps it along the tracked source-text quadrilateral. A glyph encoder pools the result into 64 tokens, and every VACE block attends to those tokens through a zero-initialized condition cross-attention layer. Weights: [ViTeX-Bench/ViTeX-Edit-14B](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B).
+Reference editor for video scene text editing, released with ViTeX-Bench ([paper](https://arxiv.org/abs/2609.40356)). It fine-tunes the VACE branch of [Wan2.1-VACE-14B](https://huggingface.co/Wan-AI/Wan2.1-VACE-14B) on the 230-clip training split of [ViTeX-Dataset](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset) and adds a glyph-video stream. The glyph stream renders the target string in a typeface matched to the source text and warps it along the tracked source-text quadrilateral. A glyph encoder pools the result into 64 tokens, and every VACE block attends to those tokens through a zero-initialized condition cross-attention layer. Weights: [ViTeX-Bench/ViTeX-Edit-14B](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B).
 
 | file | purpose |
 |---|---|

@@ -42,15 +42,15 @@ The final strategy provides a free-form natural-language edit instruction to a g
 
 | baseline | reference | inference |
 |---|---|---|
-| **Kling Video 3.0 Omni** | Kuaishou Kling Team, 2025 | Closed-source commercial V2V system; queried through the public API with a fixed instruction template |
+| **Kling Video 3.0 Omni** | Kuaishou Kling Team, 2025 | Closed-source commercial V2V system; queried through its public web interface with a fixed instruction template |
 
-Each of the 157 test clips is submitted, the returned video is retrieved, and the output is re-encoded to $1280 \times 720$ / 24 fps / 120 frames to match the evaluation grid. The API version and query date are reported alongside the final results; per-clip cost is reported in the paper supplementary.
+Each of the 157 test clips is uploaded manually, and the returned $1280 \times 720$ / 24 fps / 121-frame video has its trailing frame dropped to match the 120-frame evaluation grid; otherwise the output is used as-is. Product-version and query-date metadata are recorded with the released evaluation artifacts.
 
 We chose **one** representative closed-source commercial system rather than three to keep the baseline grid focused — the failure-mode signal at the family level is comparable across Runway, Luma, and Kling. Google Veo is not included because its public API exposes text-to-video, image-to-video, and scene extension but no in-place V2V mode that accepts a user-supplied source video as input.
 
 ## Identity sanity baseline
 
-We additionally release an **identity** baseline (built by `benchmark/make_identity_baseline.py`) that copies the source video verbatim as the prediction; it is reported as the **Source video** row in the paper and on the leaderboard and is never ranked. Identity anchors text correctness from below (SeqAcc should be near zero unless the source string already matches the target by chance; TTS stays high, about 0.76, because an unedited string is trivially stable, which is why TTS must be read together with SeqAcc and CharAcc) and edit locality from above for edit-locality (PSNR_loc = 100, SSIM_loc = 1, LPIPS_loc = 0, modulo the 100 dB cap on PSNR). It also calibrates Flicker against codec re-encoding noise — Flicker_full of the source itself.
+We additionally release an **identity** baseline (built by `benchmark/make_identity_baseline.py`) that copies the source video verbatim as the prediction; it is reported as the **Source video** row in [the paper](https://arxiv.org/abs/2609.40356) and on the leaderboard and is never ranked. Identity anchors text correctness from below (SeqAcc should be near zero unless the source string already matches the target by chance; TTS stays high, about 0.76, because an unedited string is trivially stable, which is why TTS must be read together with SeqAcc and CharAcc) and edit locality from above for edit-locality (PSNR_loc = 100, SSIM_loc = 1, LPIPS_loc = 0, modulo the 100 dB cap on PSNR). It also calibrates Flicker against codec re-encoding noise — Flicker_full of the source itself.
 
 ## Excluded methods
 
@@ -63,6 +63,6 @@ We additionally release an **identity** baseline (built by `benchmark/make_ident
 
 ## Reference: ViTeX-Edit-14B (ours)
 
-ViTeX-Edit-14B is the reference model anchored under ViTeX-Bench. It fine-tunes the VACE branch of Wan2.1-VACE-14B and adds a glyph-video conditioning pathway: the target string is rendered and tracked along the source text, encoded to 64 tokens, and attended by every VACE block through a zero-initialized condition cross-attention layer. Method and training details are in the paper (Section 4 and the ViTeX-Edit-14B implementation appendix). Code for glyph rendering, inference, the Composite wrapper and training is in [`vitex_edit/`](../vitex_edit); weights are on [Hugging Face](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B).
+ViTeX-Edit-14B is the reference model anchored under ViTeX-Bench. It fine-tunes the VACE branch of Wan2.1-VACE-14B and adds a glyph-video conditioning pathway: the target string is rendered and tracked along the source text, encoded to 64 tokens, and attended by every VACE block through a zero-initialized condition cross-attention layer. Method and training details are in [the paper](https://arxiv.org/abs/2609.40356) (Section 4 and the ViTeX-Edit-14B implementation appendix). Code for glyph rendering, inference, the Composite wrapper and training is in [`vitex_edit/`](../vitex_edit); weights are on [Hugging Face](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B).
 
 `results/summary.tsv` contains the headline numbers from the paper. The full per-clip JSON for every baseline and ViTeX-Edit-14B is also published under `results/` so independent analyses (per-language stratification, target-text length sweeps, motion-intensity sweeps, …) can be run without re-executing OCR or the GPU pipeline.

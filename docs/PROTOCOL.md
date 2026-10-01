@@ -1,6 +1,6 @@
 # Evaluation Protocol
 
-ViTeX-Bench reports **thirteen metrics** along **three axes** — text correctness (3 metrics), visual quality (6 metrics), and edit locality (4 metrics). The full thirteen-metric vector is the unit of report. One metric per axis is designated as primary, and methods are compared through the Pareto set on the three primaries; no aggregate score is computed (see the final section).
+ViTeX-Bench reports **thirteen metrics** along **three axes** — text correctness (3 metrics), visual quality (6 metrics), and edit locality (4 metrics). The full thirteen-metric vector is the unit of report. One metric per axis is designated as primary, and methods are compared through the Pareto set on the three primaries; no aggregate score is computed (see the final section). The protocol is defined in Section 3 of [the paper](https://arxiv.org/abs/2609.40356).
 
 ## Task
 

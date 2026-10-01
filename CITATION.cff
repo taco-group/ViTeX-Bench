@@ -42,3 +42,10 @@ preferred-citation:
   collection-title: "Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets"
   year: 2026
   url: "https://vitex-bench.github.io/"
+  identifiers:
+    - type: doi
+      value: "10.48550/arXiv.2609.40356"
+      description: "arXiv preprint"
+    - type: url
+      value: "https://arxiv.org/abs/2609.40356"
+      description: "arXiv abstract page"

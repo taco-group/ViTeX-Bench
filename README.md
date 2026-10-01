@@ -1,5 +1,6 @@
 # ViTeX-Bench
 
+📄 [Paper](https://arxiv.org/abs/2609.40356) &nbsp;·&nbsp;
 🌐 [Project page](https://vitex-bench.github.io/) &nbsp;·&nbsp;
 📊 [Dataset](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset) &nbsp;·&nbsp;
 🧪 Code &nbsp;·&nbsp;
@@ -10,7 +11,7 @@ This repository holds the benchmark's evaluation code and the code of the refere
 
 Evaluation pipeline for **video scene text editing**. A 13-metric, three-axis protocol (text correctness, visual quality, edit locality) on the frozen 157-clip evaluation split of [ViTeX-Dataset](https://huggingface.co/datasets/ViTeX-Bench/ViTeX-Dataset). The full thirteen-metric vector is the unit of report. One metric per axis is primary — **SeqAcc** (text correctness), **Warp_crop** (temporal quality), **DreamSim_loc** (edit locality) — and the public [Leaderboard](https://vitex-bench.github.io/ViTeX-Bench-Leaderboard/) marks the Pareto set on these three instead of computing an aggregate score.
 
-> Accompanies *ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing* (NeurIPS 2026 Track on Evaluations and Datasets).
+> Accompanies [*ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing*](https://arxiv.org/abs/2609.40356) (NeurIPS 2026 Track on Evaluations and Datasets).
 
 ## Quickstart
 
@@ -33,7 +34,7 @@ The runner auto-downloads the ViTeX-Dataset eval split on first run. Output:
 
 ## Reference model: ViTeX-Edit-14B
 
-[`vitex_edit/`](./vitex_edit) contains everything needed to run the reference editor on your own clips or to reproduce it on the evaluation split: typeface selection, glyph-video rendering, inference with multi-GPU sharding and low-memory modes, the Composite wrapper, and the two-stage training recipe. Weights are on [Hugging Face](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B). See [`vitex_edit/README.md`](./vitex_edit/README.md).
+[`vitex_edit/`](./vitex_edit) contains everything needed to run the reference editor on your own clips or to reproduce it on the evaluation split: typeface selection, glyph-video rendering, inference with multi-GPU sharding and low-memory modes, the Composite wrapper, and the two-stage training recipe. Weights are on [Hugging Face](https://huggingface.co/ViTeX-Bench/ViTeX-Edit-14B), and the method is described in Section 4 of the [paper](https://arxiv.org/abs/2609.40356). See [`vitex_edit/README.md`](./vitex_edit/README.md).
 
 ## Submitting
 
@@ -47,10 +48,13 @@ Apache-2.0 (this code; see [`LICENSE`](./LICENSE)). `vitex_edit/diffsynth/` is a
 
 ```bibtex
 @inproceedings{chen2026vitexbench,
-  title     = {ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing},
-  author    = {Chen, Xinghao and Gao, Xiangbo and Yu, Jiongze and Wu, Yuheng and Tu, Zhengzhong},
-  booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
-  year      = {2026},
-  url       = {https://vitex-bench.github.io/}
+  title         = {ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing},
+  author        = {Chen, Xinghao and Gao, Xiangbo and Yu, Jiongze and Wu, Yuheng and Tu, Zhengzhong},
+  booktitle     = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
+  year          = {2026},
+  eprint        = {2609.40356},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url           = {https://vitex-bench.github.io/}
 }
 ```
