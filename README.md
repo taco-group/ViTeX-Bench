@@ -48,13 +48,13 @@ Apache-2.0 (this code; see [`LICENSE`](./LICENSE)). `vitex_edit/diffsynth/` is a
 
 ```bibtex
 @inproceedings{chen2026vitexbench,
-  title         = {ViTeX-Bench: Benchmarking High-Fidelity Video Scene Text Editing},
+  title         = {{ViTeX-Bench}: Benchmarking High-Fidelity Video Scene Text Editing},
   author        = {Chen, Xinghao and Gao, Xiangbo and Yu, Jiongze and Wu, Yuheng and Tu, Zhengzhong},
   booktitle     = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
   year          = {2026},
   eprint        = {2609.40356},
   archivePrefix = {arXiv},
   primaryClass  = {cs.CV},
-  url           = {https://vitex-bench.github.io/}
+  url           = {https://arxiv.org/abs/2609.40356}
 }
 ```
