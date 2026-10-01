@@ -44,7 +44,7 @@ The final strategy provides a free-form natural-language edit instruction to a g
 |---|---|---|
 | **Kling Video 3.0 Omni** | Kuaishou Kling Team, 2025 | Closed-source commercial V2V system; queried through its public web interface with a fixed instruction template |
 
-Each of the 157 test clips is uploaded manually, and the returned $1280 \times 720$ / 24 fps / 121-frame video has its trailing frame dropped to match the 120-frame evaluation grid; otherwise the output is used as-is. Product-version and query-date metadata are recorded with the released evaluation artifacts.
+Each of the 157 test clips is uploaded manually, and the returned $1280 \times 720$ / 24 fps / 121-frame video has its trailing frame dropped to match the 120-frame evaluation grid; otherwise the output is used as-is.
 
 We chose **one** representative closed-source commercial system rather than three to keep the baseline grid focused — the failure-mode signal at the family level is comparable across Runway, Luma, and Kling. Google Veo is not included because its public API exposes text-to-video, image-to-video, and scene extension but no in-place V2V mode that accepts a user-supplied source video as input.
 
