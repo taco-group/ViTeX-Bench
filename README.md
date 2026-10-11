@@ -19,7 +19,7 @@ Evaluation pipeline for **video scene text editing**. A 13-metric, three-axis pr
 git clone https://github.com/taco-group/ViTeX-Bench.git && cd ViTeX-Bench
 
 # Two envs because PaddleOCR conflicts with PyTorch / pyiqa.
-conda create -n paddleocr   python=3.12 -y && conda activate paddleocr   && pip install paddleocr opencv-python && conda deactivate
+conda create -n paddleocr   python=3.12 -y && conda activate paddleocr   && pip install paddleocr==3.4.1 "paddlex[ocr-core]==3.4.3" paddlepaddle==3.2.2 && conda deactivate
 conda create -n vitex-bench python=3.12 -y && conda activate vitex-bench && pip install -r requirements.txt        && conda deactivate
 
 # Drop your method's predictions in baseline_output_videos/<your_method>/<id>.mp4

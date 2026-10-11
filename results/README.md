@@ -28,7 +28,7 @@ Means only — full 95 % bootstrap CIs over 1000 clip-level resamples are writte
 import json
 agg = json.load(open('outputs/ViTeX-14B/eval.json'))['aggregate']
 print(agg['SeqAcc'])
-# {'mean': 0.341, 'ci_lo': 0.265, 'ci_hi': 0.418, 'n': 157}
+# {'mean': 0.363, 'ci_lo': 0.289, 'ci_hi': 0.436, 'n': 152}
 ```
 
 The numbers in this directory were produced on the test split distributed with this repository's [accompanying paper](https://arxiv.org/abs/2609.40356). See `docs/REPRODUCIBILITY.md` for the environment and expected runtime.

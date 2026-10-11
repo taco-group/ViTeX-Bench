@@ -127,7 +127,7 @@ All four metrics are GPU-batched in our pipeline.
 Per-clip values are averaged with **None entries skipped** (this is how the per-clip exclusion rule shows up in the aggregate). For each aggregate we report the **percentile 95 % bootstrap CI** over **1000 clip-level resamples** with replacement. CIs are written into `eval.json` alongside each metric's mean.
 
 ```json
-"SeqAcc": { "mean": 0.341, "ci_lo": 0.265, "ci_hi": 0.418, "n": 157 }
+"SeqAcc": { "mean": 0.363, "ci_lo": 0.289, "ci_hi": 0.436, "n": 152 }
 ```
 
 Bootstrap captures sampling uncertainty over the 157-clip test split; if a CI is wide it tells the reader that the difference between two methods may not be reliable on this much data. The CIs make it easy to judge when method-vs-method comparisons are statistically well-supported.

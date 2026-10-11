@@ -11,10 +11,10 @@ ViTeX-Bench uses **two** conda environments because PaddleOCR and PyTorch + pyiq
 ```bash
 conda create -n paddleocr python=3.12 -y
 conda activate paddleocr
-pip install paddleocr opencv-python
+pip install paddleocr==3.4.1 "paddlex[ocr-core]==3.4.3" paddlepaddle==3.2.2
 ```
 
-PaddleOCR pulls PaddlePaddle 3.x. The pipeline forces CPU execution (`CUDA_VISIBLE_DEVICES=""`) because PaddlePaddle 3.2 does not yet support Blackwell GPUs (RTX 5090, compute capability 12.0). On older NVIDIA generations (Ampere / Hopper) you can switch to GPU OCR by passing `--device gpu` to `benchmark/ocr_extract.py`; for that case set `--workers 1`.
+Pin these versions: PaddleX 3.5 and later change the OCR pipeline and shift text scores (SeqAcc by about 0.01 on the same videos). The pipeline forces CPU execution (`CUDA_VISIBLE_DEVICES=""`) because PaddlePaddle 3.2 does not yet support Blackwell GPUs (RTX 5090, compute capability 12.0). On older NVIDIA generations (Ampere / Hopper) you can switch to GPU OCR by passing `--device gpu` to `benchmark/ocr_extract.py`; for that case set `--workers 1`.
 
 ### `vitex-bench` (Stage 2 — GPU metrics)
 
@@ -97,7 +97,7 @@ for k, v in sorted(d['per_clip'].items())[:5]:
 
 Differences of a few percentage points are expected because:
 - Some Family A baselines (especially those distributed without exact training-data hashes) may produce slightly different fine-tuned outputs across hardware.
-- PP-OCRv5 model weights are versioned; the `_PADDLEX_VERSION` in your install determines the exact recognizer.
+- PP-OCRv5 model weights and the OCR pipeline are versioned; use the PaddleOCR / PaddleX / PaddlePaddle versions pinned above.
 
 If your numbers diverge by more than ±1 % on aggregate metrics, the most common causes are (i) prediction videos at the wrong spatial resolution (the pipeline auto-resamples but Lanczos vs bilinear can differ slightly) and (ii) mask binarization threshold mismatches when masks are stored as PNG sequences instead of MP4 — convert to MP4 before invoking the pipeline.
 
