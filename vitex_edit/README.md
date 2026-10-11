@@ -88,7 +88,7 @@ Predictions are saved at the source frame count (120), 1280×720, 24 fps, which 
 
 ## Note on the earlier Hugging Face script
 
-The `inference_example.py` that was bundled with the weights on Hugging Face re-initialized the glyph encoder and zeroed the condition cross-attention output whenever the weights were loaded, so its outputs ignored the glyph video. The ViTeX-Edit-14B results in v1 of the paper were produced that way; later versions report results from this code, and list the glyph-free configuration separately as ViTeX-Edit-14B (w/o glyph). `inference.py` here loads the checkpoint as trained; new modules are initialized only when their weights are missing (training from Wan2.1-VACE-14B). If you ran the old script, re-run with this code. `--no_glyph` switches the glyph stream off, so the target string is given only by the text prompt; this is the ViTeX-Edit-14B (w/o glyph) configuration.
+The `inference_example.py` that was bundled with the weights on Hugging Face re-initialized the glyph encoder and zeroed the condition cross-attention output whenever the weights were loaded, so its outputs ignored the glyph video. The ViTeX-Edit-14B results in v1 of the paper were produced that way; later versions report results from this code, and list the text-only configuration separately as ViTeX-Edit-14B (text-only). `inference.py` here loads the checkpoint as trained; new modules are initialized only when their weights are missing (training from Wan2.1-VACE-14B). If you ran the old script, re-run with this code. `--no_glyph` switches the glyph stream off, so the target string is given only by the text prompt; this is the ViTeX-Edit-14B (text-only) configuration.
 
 ## Memory
 

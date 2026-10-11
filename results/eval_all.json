@@ -37246,7 +37246,7 @@
       }
     },
     "ViTeX-14B_noglyph": {
-      "label": "ViTeX-Edit-14B (w/o glyph)",
+      "label": "ViTeX-Edit-14B (text-only)",
       "family": "Reference editor",
       "n_clips": 157,
       "aggregate": {
@@ -40630,7 +40630,7 @@
       }
     },
     "ViTeX-14B_noglyph_Corp": {
-      "label": "ViTeX-Edit-14B (w/o glyph, Composite)",
+      "label": "ViTeX-Edit-14B (text-only, Composite)",
       "family": "Reference editor",
       "n_clips": 157,
       "aggregate": {
