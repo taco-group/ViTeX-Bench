@@ -44,6 +44,10 @@ METHOD_LABEL = {
     "kling":            ("Kling Video 3.0 Omni",   "D — instruction-guided video editing"),
     "ViTeX-14B":        ("ViTeX-Edit-14B",              "Reference editor"),
     "ViTeX-14B_Corp":   ("ViTeX-Edit-14B (Composite)",  "Reference editor"),
+    # Same weights with the glyph stream disabled at inference (vitex_edit --no_glyph): the
+    # target string reaches the model only through the text prompt.
+    "ViTeX-14B_noglyph":      ("ViTeX-Edit-14B (w/o glyph)",            "Reference editor"),
+    "ViTeX-14B_noglyph_Corp": ("ViTeX-Edit-14B (w/o glyph, Composite)", "Reference editor"),
 }
 
 PAPER_NOTE = "Chen et al., 2026"
@@ -65,12 +69,15 @@ EXTERNAL_REF = {
     "Kling Video 3.0 Omni":  ("Kuaishou (closed)", "", ""),
     "ViTeX-Edit-14B":             (PAPER_NOTE, PAPER_URL, "https://github.com/taco-group/ViTeX-Bench/tree/main/vitex_edit"),
     "ViTeX-Edit-14B (Composite)": (PAPER_NOTE, PAPER_URL, "https://github.com/taco-group/ViTeX-Bench/tree/main/vitex_edit"),
+    "ViTeX-Edit-14B (w/o glyph)": (PAPER_NOTE, PAPER_URL, "https://github.com/taco-group/ViTeX-Bench/tree/main/vitex_edit"),
+    "ViTeX-Edit-14B (w/o glyph, Composite)": (PAPER_NOTE, PAPER_URL, "https://github.com/taco-group/ViTeX-Bench/tree/main/vitex_edit"),
     "Source video":          ("", "", ""),
 }
 
 
 # Rows that are not independent editors and are never ranked.
-KIND = {"Source video": "reference", "ViTeX-Edit-14B (Composite)": "postprocessed"}
+KIND = {"Source video": "reference", "ViTeX-Edit-14B (Composite)": "postprocessed",
+        "ViTeX-Edit-14B (w/o glyph, Composite)": "postprocessed"}
 # Temporal metrics come from linear-blend frame interpolation (paper App. F).
 TEMPORAL_NOT_COMPARABLE = {"VideoPainter"}
 
